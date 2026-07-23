@@ -5,6 +5,8 @@ description: 战锤40k(11版)竞技军表组装助手。当用户想组军表、
 
 # 战锤40k 军表组装助手
 
+本技能遵循通用的 SKILL.md 约定,任何支持该约定的 AI Agent(Claude Code、Codex、Kimi Code、Cursor 等)都可加载使用。
+
 按以下流程执行,不要跳步。所有路径中的 `SKILL_DIR` 指本 SKILL.md 所在目录。
 
 ## 第 0 步:本地数据缓存(每次必做)
@@ -20,7 +22,7 @@ description: 战锤40k(11版)竞技军表组装助手。当用户想组军表、
 1. 读 `meta.json`。用 GitHub API 查该文件最新提交日期(只需 1 条):
    `curl -s "https://api.github.com/repos/BSData/wh40k-11e/commits?path=<URL编码的文件名>&per_page=1"`
 2. **本地已有且 commitDate 一致 → 跳过下载**,直接使用本地文件。
-3. 本地没有或有更新 → 下载,**优先走 jsDelivr CDN**(raw.githubusercontent.com 在国内极慢/超时,不要直接用):
+3. 本地没有或有更新 → 下载,**优先走 jsDelivr CDN**(raw.githubusercontent.com 在部分网络环境下极慢/超时,不要直接用):
    `curl -sL --max-time 100 "https://cdn.jsdelivr.net/gh/BSData/wh40k-11e@master/<URL编码的文件名>" -o <文件名>`
    jsDelivr 失败再试 `https://mirror.ghproxy.com/https://raw.githubusercontent.com/BSData/wh40k-11e/master/<文件名>`。
 4. 下载成功后更新 `meta.json` 的 commitDate 和 fetchedAt。
@@ -64,6 +66,6 @@ description: 战锤40k(11版)竞技军表组装助手。当用户想组军表、
 
 ## 注意事项
 
-- 下载/解析 BSData 用命令行 + Python(`py -c`,注意 Windows 上 `python` 是商店占位符,要用 `py`);JSON 结构为 `catalogue.sharedSelectionEntries` 递归,单位分数在 `costs` 里 name 为 `pts` 的项;大模型数量分档的精确价格以比赛导出表为准,BSData 只含基础档时按比例估算并标注。
-- 抓取网页正文用 FetchURL;listhammer 赛果页只含排名不含表内容,完整表去 tabletopbattles。
+- 下载/解析 BSData 用命令行 + Python(注意 Windows 上 `python` 可能是商店占位符,要用 `py`);JSON 结构为 `catalogue.sharedSelectionEntries` 递归,单位分数在 `costs` 里 name 为 `pts` 的项;大模型数量分档的精确价格以比赛导出表为准,BSData 只含基础档时按比例估算并标注。
+- 抓取网页正文优先用 Agent 自带的网页抓取工具,没有则用 curl;listhammer 赛果页只含排名不含表内容,完整表去 tabletopbattles。
 - 当前是 11th Edition:组表时是「主分队 + 若干 1DP 附加分队」结构,Disposition(气质)也是表的一部分,别漏。
